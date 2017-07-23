@@ -1,7 +1,10 @@
-FROM ghost:0.11.9-alpine
+FROM ghost:0.11.10-alpine
 
-ENV GHOST_URL http://127.0.0.1:3000
+RUN cd / && npm install lodash && echo $PWD
 
-COPY entrypoint.sh /entrypoint.sh
+RUN  cp $GHOST_SOURCE/config.example.js $GHOST_CONTENT/config.example.js
 
-ENTRYPOINT  ["/entrypoint.sh"]
+COPY config.js $GHOST_SOURCE/config.js
+
+ENV GHOST_DATABASE_CONNECTION_FILENAME=$GHOST_CONTENT/data/ghost.db \
+    GHOST_PATHS_CONTENTPATH=$GHOST_CONTENT/
